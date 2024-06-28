@@ -51,8 +51,11 @@ model Comment {
   id            Int       @id @default(autoincrement())
   userId        Int
   postId        Int
+  parentId      Int?    
   user          User      @relation(fields: [userId], references: [id])
   post          Post      @relation(fields: [postId], references: [id])
+  reply         Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies       Comment[] @relation("CommentReplies")
   content       String    @db.VarChar(250)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt

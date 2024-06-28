@@ -44,13 +44,13 @@ async function seed() {
                 create: [
                     {
                         title: 'My dog zeus',
-                        content: 'He is so kind and handsome',
+                        content: 'It is so kind and handsome',
                         is_published: true,
                         picture_url: 'data:image/zeus.jpeg'
                     },
                     {
                         title: 'My cat blinky',
-                        content: 'She blinks too much',
+                        content: 'It blinks too much',
                         is_published: true,
                         picture_url: 'data:image/blinky.jpeg'
                     }
@@ -97,18 +97,18 @@ async function seed() {
 
     const commentsPromise = [
         {
-            userId: (await usersPromise[1]).id,
-            postId: (await usersPromise[0]).posts[0].id,
+            userId: users[1].id,
+            postId: users[0].posts[0].id,
             content: 'I do not agree.. SQL > prisma'
         },
         {
-            userId: (await usersPromise[0]).id,
-            postId: (await usersPromise[1]).posts[0].id,
-            content: 'OMG, he is so cute!!'
+            userId: users[0].id,
+            postId: users[1].posts[0].id,
+            content: 'OMG, its so cute!!'
         },
         {
-            userId: (await usersPromise[0]).id,
-            postId: (await usersPromise[2]).posts[1].id,
+            userId: users[0].id,
+            postId: users[2].posts[1].id,
             content: 'Need to go there ASAP'
         }
     ].map(comment => prisma.comment.create({
@@ -117,8 +117,34 @@ async function seed() {
 
     const comments = await Promise.all(commentsPromise)
 
+    const repliesPromise = [
+        {
+            userId: users[0].id,
+            postId: users[0].posts[0].id,
+            parentId: comments[0].id,
+            content: 'Prisma makes your db life easier'
+        },
+        {
+            userId: users[1].id,
+            postId: users[1].posts[0].id,
+            parentId: comments[1].id,
+            content: 'Of course it is'
+        },
+        {
+            userId: users[2].id,
+            postId: users[2].posts[1].id,
+            parentId: comments[2].id,
+            content: 'Strongly recommend you!'
+        }
+    ].map(reply => prisma.comment.create({
+        data: reply
+    }))
+
+    const replies = await Promise.all(repliesPromise)
+
     console.log('users created', users);
     console.log('comments created', comments);
+    console.log('replies created', replies);
 
     process.exit(0);
 }
