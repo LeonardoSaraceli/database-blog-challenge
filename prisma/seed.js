@@ -4,8 +4,14 @@ const prisma = new PrismaClient();
 async function seed() {
     const createdUsers = await prisma.user.createMany({
         data: [
-            { username: 'alicemartin' },
-            { username: 'alicemartin' }
+            { 
+                username: 'alicemay', 
+                email: 'alicermay@gmail.com' 
+            },
+            { 
+                username: 'javiertech', 
+                email: 'javiertech@gmail.com' 
+            }
         ]
     });
 
