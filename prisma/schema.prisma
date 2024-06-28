@@ -15,6 +15,7 @@ model User {
   id          Int       @id @default(autoincrement())
   profile     Profile?
   posts       Post[]
+  comments    Comment[]
   username    String    @unique @db.VarChar(10)
   email       String    @unique
   createdAt   DateTime  @default(now())
@@ -37,10 +38,22 @@ model Post {
   id            Int       @id @default(autoincrement())
   userId        Int
   user          User      @relation(fields: [userId], references: [id])
+  comments      Comment[]
   title         String    @db.VarChar(150)
   content       String
   is_published  Boolean   @default(false)
   picture_url   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Comment {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  postId        Int
+  user          User      @relation(fields: [userId], references: [id])
+  post          Post      @relation(fields: [postId], references: [id])
+  content       String    @db.VarChar(250)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }

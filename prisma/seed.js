@@ -61,7 +61,27 @@ async function seed() {
     }))
 
     const users = await Promise.all(usersPromise)
+
+    const commentsPromise = [
+        {
+            userId: (await usersPromise[1]).id,
+            postId: (await usersPromise[0]).posts[0].id,
+            content: 'I do not agree.. SQL > prisma'
+        },
+        {
+            userId: (await usersPromise[0]).id,
+            postId: (await usersPromise[1]).posts[0].id,
+            content: 'OMG, he is so cute!!'
+        }
+    ].map(comment => prisma.comment.create({
+        data: comment
+    }))
+
+    const comments = await Promise.all(commentsPromise)
+
     console.log('users created', users);
+    console.log('comments created', comments);
+
     process.exit(0);
 }
 
