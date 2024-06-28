@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require("../src/db")
 
 async function seed() {
     const usersPromise = [
@@ -20,6 +19,12 @@ async function seed() {
                         title: 'I love prisma',
                         content: 'Much better than raw SQL',
                         is_published: true
+                    },
+                    {
+                        title: 'JS is unbeatable',
+                        content: 'Get your c# out of here',
+                        is_published: true,
+                        picture_url: 'data:image/jsisthebestlanguage.jpeg'
                     }
                 ]
             }
@@ -51,6 +56,34 @@ async function seed() {
                     }
                 ]
             }
+        },
+        { 
+            username: 'lindseybo', 
+            email: 'lindseybo@gmail.com',
+            profile: {
+                create: {
+                    first_name: 'Lindsey',
+                    last_name: 'Bolman',
+                    bio: 'CSS is a programming language, change my mind',
+                    picture_url: 'date:image/lindseybo.jpeg'
+                }
+            },
+            posts: {
+                create: [
+                    {
+                        title: 'Me at the beach',
+                        content: 'The view is pretty nice',
+                        is_published: true,
+                        picture_url: 'data:image/beach.jpeg'
+                    },
+                    {
+                        title: 'Rome is so amazing',
+                        content: 'Eating the real pasta',
+                        is_published: true,
+                        picture_url: 'data:image/rome.jpeg'
+                    }
+                ]
+            }
         }
     ].map(user => prisma.user.create({
         data: user,
@@ -72,6 +105,11 @@ async function seed() {
             userId: (await usersPromise[0]).id,
             postId: (await usersPromise[1]).posts[0].id,
             content: 'OMG, he is so cute!!'
+        },
+        {
+            userId: (await usersPromise[0]).id,
+            postId: (await usersPromise[2]).posts[1].id,
+            content: 'Need to go there ASAP'
         }
     ].map(comment => prisma.comment.create({
         data: comment
