@@ -13,8 +13,21 @@ datasource db {
 
 model User {
   id          Int       @id @default(autoincrement())
+  profile     Profile?
   username    String    @unique @db.VarChar(10)
   email       String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Profile {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @unique
+  user        User      @relation(fields: [userId], references: [id])
+  first_name  String    @db.VarChar(50)
+  last_name   String    @db.VarChar(50)
+  bio         String    @db.VarChar(120)
+  picture_url String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
