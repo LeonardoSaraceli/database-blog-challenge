@@ -13,6 +13,15 @@ async function seed() {
                     bio: 'I am Alice and i love coding :)',
                     picture_url: 'date:image/alicemay.jpeg'
                 }
+            },
+            posts: {
+                create: [
+                    {
+                        title: 'I love prisma',
+                        content: 'Much better than raw SQL',
+                        is_published: true
+                    }
+                ]
             }
         },
         { 
@@ -25,12 +34,29 @@ async function seed() {
                     bio: 'Always on touch with new tech',
                     picture_url: 'date:image/javierxapiro.jpeg'
                 }
+            },
+            posts: {
+                create: [
+                    {
+                        title: 'My dog zeus',
+                        content: 'He is so kind and handsome',
+                        is_published: true,
+                        picture_url: 'data:image/zeus.jpeg'
+                    },
+                    {
+                        title: 'My cat blinky',
+                        content: 'She blinks too much',
+                        is_published: true,
+                        picture_url: 'data:image/blinky.jpeg'
+                    }
+                ]
             }
         }
     ].map(user => prisma.user.create({
         data: user,
         include: {
-            profile: true
+            profile: true,
+            posts: true
         }
     }))
 
